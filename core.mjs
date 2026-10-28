@@ -1,0 +1,7 @@
+function integer(n,min,max){if(!Number.isInteger(n)||n<min||n>max)throw new Error(`${min}~${max} 사이의 정수를 입력해 주세요.`)}
+export function shuffle(list){const a=[...list];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+export function groups(total,count,absent=[]){integer(total,1,100);const a=shuffle(Array.from({length:total},(_,i)=>i+1).filter(n=>!absent.includes(n)));integer(count,1,a.length);const result=Array.from({length:count},()=>[]);a.forEach((n,i)=>result[i%count].push(n));return result}
+export function draw(total,used=[],absent=[]){integer(total,1,100);return shuffle(Array.from({length:total},(_,i)=>i+1).filter(n=>!used.includes(n)&&!absent.includes(n)))[0]??null}
+export function safeUrl(value){try{const u=new URL(value);if(u.username||u.password)return null;if(u.protocol==='https:'||(u.protocol==='http:'&&['localhost','127.0.0.1','[::1]'].includes(u.hostname)))return u.href}catch{}return null}
+export function validateApp(app){if(!app||typeof app.title!=='string'||!app.title.trim()||app.title.length>60)throw new Error('앱 이름을 1~60자로 입력해 주세요.');const url=safeUrl(app.url);if(!url)throw new Error('https:// 주소 또는 로컬 서버 주소를 입력해 주세요.');return {title:app.title.trim(),url,description:String(app.description||'').slice(0,180)}}
+export function formatTime(seconds){const n=Math.max(0,Math.ceil(seconds));return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`}
